@@ -214,7 +214,7 @@ function love.mousepressed(x, y, button)
         if tile.flagged == true then
             tile.flagged = false
             num_flags_left = num_flags_left + 1
-        elseif tile.flagged == false and num_flags_left > 0 then
+        else
             tile.flagged = true
             num_flags_left = num_flags_left - 1
         end
