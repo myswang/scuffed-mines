@@ -1,9 +1,8 @@
 -- GLOBAL VARIABLES
 
 -- game configuration
-local tiles_y = 16
-local tiles_x = 16
-local num_mines = 40
+
+local tiles_y, tiles_x, num_mines
 local text_colours = {
     {0, 0, 1},
     {0, 0.8, 0},
@@ -15,20 +14,26 @@ local text_colours = {
     {0.8, 0.8, 0.8}
 }
 
-local num_flags_left = num_mines
-local num_tiles_left = tiles_y * tiles_x
+local diffs = {
+    easy = { 9, 9, 10 },
+    medium = { 16, 16, 40 },
+    hard = { 16, 30, 99 }
+}
+
+local cur_diff
+local num_flags_left, num_tiles_left
 
 -- window configuration
 local tile_size = 40
 local inner_scale = 0.9
-local inner_size = tile_size * inner_scale
-local middle = (inner_scale + 1) / 2
 local tile_offset_y = 1
 local tile_offset_x = 0
-local screen_tiles_y = tiles_y+tile_offset_y
-local screen_tiles_x = tiles_x+tile_offset_x*2
-local screen_y = screen_tiles_y * tile_size
-local screen_x = screen_tiles_x * tile_size
+
+local inner_size = tile_size * inner_scale
+local middle = (inner_scale + 1) / 2
+
+local screen_tiles_y, screen_tiles_x
+local screen_y, screen_x
 
 -- game state
 local tiles = {}
@@ -144,16 +149,31 @@ local function do_game_over()
     game_over = true
 end
 
-local function restart_game()
+local function restart_game(diff)
     -- generate random seed for mine placement
     math.randomseed(os.time() + os.clock() * 1000000)
+
+    tiles_y, tiles_x, num_mines = table.unpack(diff)
+
     tiles = {}
     mines_pos = {}
     game_over = false
     game_started = false
     timer = 0
+
+    screen_tiles_y = tiles_y+tile_offset_y
+    screen_tiles_x = tiles_x+tile_offset_x*2
+    screen_y = screen_tiles_y * tile_size
+    screen_x = screen_tiles_x * tile_size
+
+    if cur_diff ~= diff then
+        love.window.setMode(screen_x, screen_y)
+    end
+    cur_diff = diff
+
     num_flags_left = num_mines
     num_tiles_left = tiles_y * tiles_x
+
     create_tiles()
 end
 
@@ -161,12 +181,10 @@ end
 
 function love.load()
     love.window.setTitle("Scuffed Minesweeper")
-    love.window.setMode(screen_x, screen_y)
     local font = love.graphics.newFont(inner_size)
     love.graphics.setFont(font)
     love.graphics.setBackgroundColor(0.2 ,0.2 ,0.2)
-    -- restart the game
-    restart_game()
+    restart_game(diffs.easy)
 end
 
 function love.update(dt)
@@ -177,8 +195,12 @@ function love.update(dt)
 end
 
 function love.keypressed(key)
-    if key == "return" then
-        restart_game()
+    if key == "1" then
+        restart_game(diffs.easy)
+    elseif key == "2" then
+        restart_game(diffs.medium)
+    elseif key == "3" then
+        restart_game(diffs.hard)
     elseif key == "escape" then
         love.event.quit()
     end
@@ -190,7 +212,7 @@ function love.mousepressed(x, y, button)
     local rel_x = math.ceil(x/screen_x*screen_tiles_x) - tile_offset_x
     -- restart game by clicking the smiley face
     if rel_y < 1 and rel_x >= math.floor(screen_tiles_x/2)-1 and rel_x <= math.floor(screen_tiles_x/2)+1 then
-        restart_game()
+        restart_game(cur_diff)
     end
     -- range check
     if rel_y < 1 or rel_x < 1 or rel_y > tiles_y or rel_x > tiles_x or game_over then
