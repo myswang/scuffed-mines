@@ -20,7 +20,7 @@ to start the game.
 
 **Mouse:**
 
- - Left click: R
+ - Left click: Reveal a tile.
  - Right click: Flag a tile.
  - Middle click: Perform a "chord" where a revealed tile with the correct number of flags has all hidden tiles revealed.
 
