@@ -158,7 +158,9 @@ local function restart_game(diff)
     -- seed = 123456789
     math.randomseed(seed)
 
-    tiles_y, tiles_x, num_mines = table.unpack(diff)
+    tiles_y = diff[1]
+    tiles_x = diff[2]
+    num_mines = diff[3]
 
     tiles = {}
     mines_pos = {}
