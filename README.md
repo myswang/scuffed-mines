@@ -26,8 +26,9 @@ to start the game.
 
 **Keyboard:**
 
- - 1/2/3: Start an easy/medium/hard game (you can also click on the smiley face at the top)
- - Escape: Exit the game
+ - 1/2/3: Start an easy/medium/hard game (you can also click on the smiley face at the top).
+ - S: Print the map seed to the console.
+ - Escape: Exit the game.
 
  ## Game Configuration
 

@@ -20,7 +20,7 @@ local diffs = {
     hard = { 16, 30, 99 }
 }
 
-local cur_diff
+local cur_diff, seed
 local num_flags_left, num_tiles_left
 
 -- window configuration
@@ -151,7 +151,12 @@ end
 
 local function restart_game(diff)
     -- generate random seed for mine placement
-    math.randomseed(os.time() + os.clock() * 1000000)
+    -- NOTE: press the S key to print the current seed to the console.
+    -- you can override the randomly generated seed here
+    -- an example seed is commented out below
+    seed = math.random(-2^63, 2^63 - 1)
+    -- seed = 123456789
+    math.randomseed(seed)
 
     tiles_y, tiles_x, num_mines = table.unpack(diff)
 
@@ -180,6 +185,7 @@ end
 -- MAIN FUNCTIONS
 
 function love.load()
+    math.randomseed(os.time())
     love.window.setTitle("Scuffed Minesweeper")
     local font = love.graphics.newFont(inner_size)
     love.graphics.setFont(font)
@@ -201,6 +207,8 @@ function love.keypressed(key)
         restart_game(diffs.medium)
     elseif key == "3" then
         restart_game(diffs.hard)
+    elseif key == "s" then
+        print("Seed: "..string.format("%.0f", seed))
     elseif key == "escape" then
         love.event.quit()
     end
