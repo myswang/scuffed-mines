@@ -211,7 +211,7 @@ function love.mousepressed(x, y, button)
     local rel_y = math.ceil(y/screen_y*screen_tiles_y) - tile_offset_y
     local rel_x = math.ceil(x/screen_x*screen_tiles_x) - tile_offset_x
     -- restart game by clicking the smiley face
-    if rel_y < 1 and rel_x >= math.floor(screen_tiles_x/2)-1 and rel_x <= math.floor(screen_tiles_x/2)+1 then
+    if rel_y < 1 and x >= screen_x/2 - tile_size/2 and x <= screen_x/2 + tile_size/2 then
         restart_game(cur_diff)
     end
     -- range check
@@ -285,7 +285,7 @@ function love.draw()
         smiley = ":-)"
     end
     text:set({{1, 1, 1}, smiley})
-    love.graphics.draw(text, screen_x/2-font:getWidth(smiley),0)
+    love.graphics.draw(text, screen_x/2-font:getWidth(smiley)+tile_size/2,0)
     -- draw tiles
     for i = 1, tiles_y do
         for j = 1, tiles_x do
