@@ -324,7 +324,7 @@ function love.draw()
                 end
                 love.graphics.rectangle("fill", (j+tile_offset_x-middle)*tile_size, (i+tile_offset_y-middle)*tile_size, inner_size, inner_size)
                 love.graphics.setColor(0, 0, 0)
-                love.graphics.circle("fill", (j+tile_offset_x-middle/2)*tile_size, (i+tile_offset_y-middle/2)*tile_size, (inner_size*0.8)/2)
+                love.graphics.circle("fill", (j+tile_offset_x-middle/2)*tile_size-1, (i+tile_offset_y-middle/2)*tile_size-1, inner_size*0.8/2)
             else
                 love.graphics.setColor(0.4, 0.4, 0.4)
                 love.graphics.rectangle("fill", (j+tile_offset_x-middle)*tile_size, (i+tile_offset_y-middle)*tile_size, inner_size, inner_size)
@@ -332,8 +332,9 @@ function love.draw()
                 local text_str = tile.adj_mines
                 if text_str ~= 0 then
                     text:set({text_colours[text_str], text_str})
-                    local align_x = font:getWidth(text_str) / inner_size
-                    love.graphics.draw(text, (j+tile_offset_x-middle+align_x/4)*tile_size, (i+tile_offset_y-middle-0.05)*tile_size)
+                    local align_x = font:getWidth(text_str) / 2
+                    local align_y = font:getHeight() / 2
+                    love.graphics.draw(text, (j+tile_offset_x-middle/2)*tile_size-align_x-1, (i+tile_offset_y-middle/2)*tile_size-align_y-1)
                 end
             end
         end
